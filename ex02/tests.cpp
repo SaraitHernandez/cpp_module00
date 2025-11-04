@@ -1,70 +1,72 @@
-#include "Account.hpp"
-#include <iostream>
-#include <iomanip>
-#include <ctime>
+// ************************************************************************** //
+//                                                                            //
+//                tests.cpp for GlobalBanksters United                        //
+//                Created on  : Thu Nov 20 23:45:02 1989                      //
+//                Last update : Wed Jan 04 09:23:52 1992                      //
+//                Made by : Brad "Buddy" McLane <bm@gbu.com>                  //
+//                                                                            //
+// ************************************************************************** //
 
-int main(void) {
+#include <vector>
+#include <algorithm>
+#include <functional>
+#include "Account.hpp"
+
+
+int		main( void ) {
+
+	typedef std::vector<Account::t>							  accounts_t;
+	typedef std::vector<int>								  ints_t;
+	typedef std::pair<accounts_t::iterator, ints_t::iterator> acc_int_t;
+
+	int	const				amounts[]	= { 42, 54, 957, 432, 1234, 0, 754, 16576 };
+	size_t const			amounts_size( sizeof(amounts) / sizeof(int) );
+	accounts_t				accounts( amounts, amounts + amounts_size );
+	accounts_t::iterator	acc_begin	= accounts.begin();
+	accounts_t::iterator	acc_end		= accounts.end();
+
+	int	const			d[]			= { 5, 765, 564, 2, 87, 23, 9, 20 };
+	size_t const		d_size( sizeof(d) / sizeof(int) );
+	ints_t				deposits( d, d + d_size );
+	ints_t::iterator	dep_begin	= deposits.begin();
+	ints_t::iterator	dep_end		= deposits.end();
+
+	int	const			w[]			= { 321, 34, 657, 4, 76, 275, 657, 7654 };
+	size_t const		w_size( sizeof(w) / sizeof(int) );
+	ints_t				withdrawals( w, w + w_size );
+	ints_t::iterator	wit_begin	= withdrawals.begin();
+	ints_t::iterator	wit_end		= withdrawals.end();
+
 	Account::displayAccountsInfos();
-	
-	Account account1(42);
-	Account account2(54);
-	Account account3(957);
-	Account account4(432);
-	Account account5(1234);
-	Account account6(0);
-	Account account7(754);
-	Account account8(1654);
-	
+	std::for_each( acc_begin, acc_end, std::mem_fun_ref( &Account::displayStatus ) );
+
+	for ( acc_int_t it( acc_begin, dep_begin );
+		  it.first != acc_end && it.second != dep_end;
+		  ++(it.first), ++(it.second) ) {
+
+		(*(it.first)).makeDeposit( *(it.second) );
+	}
+
 	Account::displayAccountsInfos();
-	
-	account1.makeDeposit(5);
-	account1.makeDeposit(765);
-	account1.makeWithdrawal(19);
-	account1.makeWithdrawal(34);
-	account1.makeWithdrawal(657);
-	
-	account2.makeDeposit(50);
-	account2.makeDeposit(765);
-	account2.makeWithdrawal(19);
-	account2.makeWithdrawal(34);
-	account2.makeWithdrawal(657);
-	
-	account3.makeDeposit(5);
-	account3.makeDeposit(765);
-	account3.makeWithdrawal(19);
-	account3.makeWithdrawal(34);
-	account3.makeWithdrawal(657);
-	
-	account4.makeDeposit(5);
-	account4.makeDeposit(765);
-	account4.makeWithdrawal(19);
-	account4.makeWithdrawal(34);
-	account4.makeWithdrawal(657);
-	
-	account5.makeDeposit(5);
-	account5.makeDeposit(765);
-	account5.makeWithdrawal(19);
-	account5.makeWithdrawal(34);
-	account5.makeWithdrawal(657);
-	
-	account6.makeDeposit(5);
-	account6.makeDeposit(765);
-	account6.makeWithdrawal(19);
-	account6.makeWithdrawal(34);
-	account6.makeWithdrawal(657);
-	
-	account7.makeDeposit(5);
-	account7.makeDeposit(765);
-	account7.makeWithdrawal(19);
-	account7.makeWithdrawal(34);
-	account7.makeWithdrawal(657);
-	
-	account8.makeDeposit(5);
-	account8.makeDeposit(765);
-	account8.makeWithdrawal(19);
-	account8.makeWithdrawal(34);
-	account8.makeWithdrawal(657);
-	
+	std::for_each( acc_begin, acc_end, std::mem_fun_ref( &Account::displayStatus ) );
+
+	for ( acc_int_t it( acc_begin, wit_begin );
+		  it.first != acc_end && it.second != wit_end;
+		  ++(it.first), ++(it.second) ) {
+
+		(*(it.first)).makeWithdrawal( *(it.second) );
+	}
+
 	Account::displayAccountsInfos();
+	std::for_each( acc_begin, acc_end, std::mem_fun_ref( &Account::displayStatus ) );
+
 	return 0;
-} 
+}
+
+
+// ************************************************************************** //
+// vim: set ts=4 sw=4 tw=80 noexpandtab:                                      //
+// -*- indent-tabs-mode:t;                                                   -*-
+// -*- mode: c++-mode;                                                       -*-
+// -*- fill-column: 75; comment-column: 75;                                  -*-
+// ************************************************************************** //

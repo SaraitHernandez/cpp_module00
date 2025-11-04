@@ -1,8 +1,10 @@
 # Object files
 *.o
-
+.DS_Store
+.vscode/
 # Executables
 ex00/megaphone
 ex01/phonebook
 ex02/account
+
 
